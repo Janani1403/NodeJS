@@ -2,10 +2,10 @@ const express = require('express');
 const bodyParser=require('body-parser');
 const mongoose = require('mongoose');
 
+var authenticate = require('../authenticate');
 const Leaders = require('../models/leaders');
 
 const leaderRouter=express.Router();
-
 leaderRouter.use(bodyParser.json());
 
 leaderRouter.route('/')

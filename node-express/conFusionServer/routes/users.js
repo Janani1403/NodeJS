@@ -1,10 +1,10 @@
 var express = require('express');
+var router = express.Router();
 const bodyParser = require('body-parser');
 var passport = require('passport');
+
 var authenticate = require('../authenticate');
 var User = require('../models/user');
-
-var router = express.Router();
 
 router.use(bodyParser.json());
 /* GET users listing. */
@@ -37,6 +37,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.json({success: true, token: token, status: 'You are successfully logged in!'});
 });
+
 
 router.get('/logout', (req, res) => {
   if (req.session) {
