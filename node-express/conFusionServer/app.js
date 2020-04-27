@@ -27,24 +27,23 @@ connect.then((db) => {
     console.log("Connected correctly to server");
 }, (err) => { console.log(err); });
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// Secure traffic only
+app.all('*', (req, res, next) => {
+  if (req.secure) {
+    return next();
+  }
+  else {
+    res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+  }
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-function auth (req, res, next) {
-    console.log(req.user);
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
-    if (!req.user) {
-      var err = new Error('You are not authenticated!');
-      err.status = 403;
-      next(err);
-    }
-    else {
-          next();
-    }
-}
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

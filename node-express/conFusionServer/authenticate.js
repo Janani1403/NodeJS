@@ -37,3 +37,21 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts,
     }));
 
 exports.verifyUser = passport.authenticate('jwt', {session: false});
+
+exports.verifyAdmin = function(req,res,next){
+	
+	User.findOne({_id: req.user._id})
+	.then((user) => {
+	  
+	if(req.user.admin == true){
+		return true;
+	}
+	else{
+		err = new Error('User does not have admin previleges');
+		err.status = 404;
+		return next(err);
+		} 
+	}, (err) => next(err))
+	.catch((err) => next(err))
+
+}
